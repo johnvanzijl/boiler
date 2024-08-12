@@ -132,7 +132,8 @@ void BOILER::set_single_target(bool enable) {
     if(enable) this->set_single_target_();
     else this->set_multi_target_();
     this->set_config_mode_(false);
-    this->Presence->publish_state(1);
+    //this->Presence->publish_state(1);
+    //code to toggle the Presence binary_sensor
 }
 
 void BOILER::restore_factory() {
