@@ -1,0 +1,105 @@
+esphome:
+  name: boiler
+  friendly_name: Boiler
+  platform: ESP32
+  board: esp32-s3-devkitc-1
+
+
+# Enable logging
+logger:
+  baud_rate: 0
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Boiler Fallback Hotspot"
+    password: "Blablabla3!"
+
+# Enable Home Assistant API
+api:
+
+# Enable Over-the-Air updates
+ota:
+  - platform: esphome
+
+web_server:
+  local: true
+  port: 80
+
+external_components:
+  - source:
+      type: local
+      path: components
+
+captive_portal:   
+
+uart:
+  id: uart_bus
+  tx_pin: 
+    number: GPIO17
+  rx_pin: 
+    number: GPIO18
+  baud_rate: 9600
+  parity: NONE
+  stop_bits: 1
+
+boiler:
+  uart_id: uart_bus
+  update_interval: 1s
+  invert_y: false
+  invert_x: false
+
+binary_sensor:
+- platform: boiler
+  has_target:
+    name: Presence
+  has_moving_target:
+    name: Moving Target
+  has_still_target:
+    name: Still Target
+
+text_sensor:
+  - platform: boiler
+    version:
+      name: "FW"
+    mac_address:
+      name: "MAC address"
+
+button:
+  - platform: restart
+    name: "ESP Restart"
+  - platform: boiler
+    factory_reset:
+      name: "Factory reset"
+    reboot:
+      name: "Reboot"
+
+switch:
+  - platform: boiler
+    single_target:
+      name: "Single target"
+
+number:
+- platform: boiler
+  presence_timeout:
+   name: "Presence timeout"
+
+select:
+  - platform: boiler
+    baud_rate:
+      name: "Baud rate"
+
+sensor:
+- platform: boiler
+  target_count:
+    name: Target count
+
+  person_0:
+    position_x:
+      name: "P0X"  
+
+    position_y:
+      name: "P0Y"  
